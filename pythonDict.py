@@ -1,0 +1,46 @@
+pythonDict = {
+  "input()":"reads user input to terminal",
+  "a**b":"raises a to the power of b",
+  "%":"Moudlo, returns the remainder of division",
+  "*":"Multiplication",
+  "-":"Subtraction",
+  "+":"Addition",
+  "=":"Assignment Operator",
+  "==":"Equality Boolean (T or F)",
+  "<=":"Less than or equal to",
+  ">=":"Greater than or equal to",
+  "<":"Less than",
+  ">":"Greater than",
+  "!=":"Not the same",
+  "==":"same",
+  "if":"control flow structure, boolean",
+  "elif":"control flow structure, boolean, follows if statement, preceeds else statements",
+  "for":"control flow structure, boolean, loops through items in lists, dictionaries or tuples, difined boundry",
+  "while":"contol flow structure, loos through items in lists, dictionaries or tuples, undefined boundry",
+  "Tuples":"List that contain elements that cannot be modified",
+  "slicing":"defining a section of a list",
+  "sorted()":"displays the list as sorted",
+  "sort()":"Sorts the list in numerical order small to large",
+  "sum()":"Sums the values in a list",
+  "max()":"gets the maximum value from a list",
+  "min()":"gets minimum from a list",
+  "remove()":"removes all of the element from a list",
+  "insert()":"inserts an element into a list",
+  "extend()":"Adds many elemets to the list",
+  "append()":"Adds one element to the list",
+  "len()":"returns number of character/elements from a list/string",
+  "index()":"Find items in the list by entering the index number",
+  "get()":"returns the value of the key identified in a dictionary",
+  "pop()":"removes the element that is identified in a dictionary or list",
+  "popitem()":"returns the item that was removed from a dictionary",
+  "clear()":"clears all of the keys-values that are listed in a dictionary",
+  "keys()":"returns all the keys in a dictionary",
+  "del":"removes the key-value identified in a dictionary or list",
+  "items()":"returns all of the key-values in a dictionary",
+  "values()":"returns all of the values of a dictionary"
+
+}
+
+#Printing all the key-value pairs
+for k, v in pythonDict.items():
+    print(k + "\n" + v)
