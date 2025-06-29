@@ -13,3 +13,6 @@ This repository contains a wide collection of Python programming coursework, inc
 - Exploratory data analysis
 - Machine learning workflows
 - Python scripting and logic
+
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
