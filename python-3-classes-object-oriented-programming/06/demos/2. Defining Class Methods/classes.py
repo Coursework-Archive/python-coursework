@@ -36,8 +36,8 @@ class Employee:
 
 
 # print(Employee.minimum_wage)
-# Employee.change_minimum_wage(200)
-# print(Employee.minimum_wage)
+Employee.change_minimum_wage(200)
+print(Employee.minimum_wage)
 
 e = Employee.new_employee("Mary", date(1991, 8, 12))
 print(e.name)

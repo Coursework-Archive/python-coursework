@@ -24,7 +24,7 @@ e = Employee("Ji-Soo", 38, 1000)
 print(e.minimum_wage)
 print(Employee.minimum_wage)
 
-# print(Employee.__dict__)
+print(Employee.__dict__)
 
-# Employee.__dict__["increase_salary"](e, 20)
-# print(e.salary)
+Employee.__dict__["increase_salary"](e, 20)
+print(e.salary)
