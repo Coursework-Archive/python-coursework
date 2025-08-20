@@ -1,0 +1,15 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+arrow = "*"
+requests = "~=2.23"
+flask = "*"
+
+[dev-packages]
+black = "==22.*"
+
+[requires]
+python_version = "3.13"

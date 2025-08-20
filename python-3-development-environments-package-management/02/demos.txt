@@ -1,0 +1,1336 @@
+                _______________________________________
+
+                 M2: MANAGING PYTHON PACKAGES WITH PIP
+
+                           Reindert-Jan Ekker
+                _______________________________________
+
+
+
+
+
+2 Clip 1: Introduction, module overview
+=======================================
+
+2.1 Module Intro                                                 :slide:
+~~~~~~~~~~~~~~~~
+
+  >> NB check "before we start" in general.org
+
+  Hi, My name is Reindert-Jan Ekker and welcome to this course. In this
+  module we'll start with taking an in-depth look at how we can use pip
+  to manage our python packages.
+
+
+2.2 Versioning slide 1
+~~~~~~~~~~~~~~~~~~~~~~
+
+  “This course was created using the displayed versions of python, pip,
+  poetry, pipenv and pipx
+
+
+2.3 Versioning slide 2
+~~~~~~~~~~~~~~~~~~~~~~
+
+  This slide shows the versions of python, pip, poetry, pipenv and pipx
+  for which the information in this course applies.”
+
+
+2.4 module overview                                              :slide:
+~~~~~~~~~~~~~~~~~~~
+
+  As your projects grow and become more complex, they will depend more
+  and more on other python packages. Managing these dependencies can be
+  challenging sometimes. In this course you will master the art of
+  dependency management with python. We'll start with looking at pip in
+  this module, and after that we will talk about project management and
+  other tools in the python ecosystem.
+
+  For now, we'll start by revisiting the essentials of Pip, to make sure
+  the basic pip commands are fresh in your mind.
+
+  We'll take a close look at the pip install command, and see how
+  versatile it is. It doesn't just allow us to install a specific
+  version of a package,
+
+  but we can also give it more intricate instructions using various
+  version operators.
+
+  We'll take a short look at how pip handles packages that have
+  dependencies as well.
+
+  Specific versions: Learn how to install specific package versions,
+  ensuring compatibility and stability in your projects.
+
+  Next we'll see how to work with packages that are not hosted on pypi,
+  like those hosted on GitHub or other version control systems.
+
+  We'll see how to install packages from your local filesystem,
+
+  and how to do a so-called editable install.
+
+  Pip can also be used outside the context of a python project, for
+  example when you want to install a program on your computer. There are
+  various ways to do that and we'll check those out and compare them.
+
+  Finally we'll see that you can create a pip configuration file, which
+  is mostly nice when you need to setup some networking settings; like
+  when you are behind a proxy server, or when your company hosts its own
+  package repository.
+
+  Great, let's get started!
+
+
+3 Clip 2: recap basics                                            :demo:
+======================
+
+3.1 Demo slide                                                   :slide:
+~~~~~~~~~~~~~~
+
+  Let's start with a short recap of the basics of using pip.
+
+  You should be familiar with these topics, but let's refresh them just
+  to be sure.
+
+  We'll cover
+
+  - using the pypi package repository to searhc for packages,
+  - how to install and remove packages
+
+  and
+
+  inspecting properties of packages after installation
+
+
+3.2 Actual Demo                                                   :demo:
+~~~~~~~~~~~~~~~
+
+  >> show <https://pypi.org/>
+
+  The website you see here is pypi.org, or the Python Package Index,
+  which is a repository of software packages for Python. When you
+  install a package with pip, this is where it will download that
+  package from - unless you tell it to look somewhere else of course.
+
+  So let's search for a package - I can type in the name here - let's
+  search for arrow -
+
+  >> search for arrow go to page
+
+  and here we see the overview for the arrow package, including a
+  project description, links to the project homepage and github, and at
+  the bottom left
+
+  >> show bottom left
+
+  some other metadata like the software license for this package and the
+  python versions it supports.
+
+  Now suppose we want to install this package.
+
+  >> show shell in demo project, activated venv
+
+  Here's a shell - and I'm inside the folder for my demo project. Note
+  that I also have an active virtual environment, which you can see by
+  the name of the environment in brackets at the start of the prompt.
+
+  You should be familiar with the basics of virtual environments; and
+  we'll look deeper into them in the next module. For now let me just
+  mention that in most cases, when you run pip to install a package, you
+  want to be inside an active environment.
+
+  Now, to install a package, we use the command 'pip install', followed
+  by the name of the package, like so:
+
+  $ python -m pip install arrow
+
+  Note that I'm not using pip by itself, but instead say python -m pip.
+  This might not be strictly necessary, but there are cases where the
+  pip command is not the correct pip for your python version. Saying
+  python -m pip is a good practice that will prevent any problems
+
+  This installs the package arrow itself, and any dependencies it has.
+  In cthis ase we got arrow version XXX, and its dependencies
+  python-dateutil and six.
+
+  Once the installation is complete, we can inspect some of its
+  properties with the 'show' command:
+
+  >> python -m pip show arrow
+
+  Which tells us several things about the package; most importantly the
+  installed version and the location where its files have been put. You
+  can see that the package has been installed inside the virtual
+  environment in my project.
+
+  Of course it's also possible to remove a package with the command
+  uninstall:
+
+  >> python -m pip uninstall arrow
+
+  And this will remove arrow from your system; but it does NOT remove
+  the dependencies that were installed with it. We can use the command
+  pip list to show everything that is still installed
+
+  >> python -m pip list
+
+  And it shows that we still have the dateutil and six packages
+  installed; so those were not automatically removed when we removed
+  arrow. I would have to remove those by hand as well.
+
+  Great, so that's a nice little recap of the most basic pip commands.
+  Let's explore what other things this tool can do for us.
+
+
+4 clip 3: installing specific versions // requirements specifiers
+=================================================================
+
+4.1 Demo clip                                                    :slide:
+~~~~~~~~~~~~~
+
+  Let's take a closer look at using the pip install command. In this
+  clip we will focus on installing specific versions of packages. We'll
+  see how to require a specific version, and how to do version
+  comparisons, as well as upgrading a package to its latest version.
+
+
+4.2 Actual demo                                                   :demo:
+~~~~~~~~~~~~~~~
+
+  In the previous clip we installed the arrow package with this command:
+
+  $ python -m pip install arrow
+
+  Now let's investigate what this command actually means. I'll start
+  with showing you the documentation for pip at pip.pypa.io
+
+  >> pip.pypa.io
+
+  and in the menu on the left i will go to the documentation for the
+  install command
+
+  >> commands -> pip install
+
+  and at the top of this page we see3 several examples of how to use pip
+  install; the first one being pip install, followed by a requirements
+  specifier. So in the command we ran before, the name of the package
+  "arrow", was taken by pip to be a "requirement specifier". We'll get
+  to the other possibilities listed on this page as well, but for now
+  let's focus on these requirements specifiers - it's what you will use
+  most of the time.
+
+  So what is a requirement specifier? There's a documentation page for
+  that as well -let me show you
+
+  >> reference - requirement specifiers
+     (<https://pip.pypa.io/en/stable/reference/requirement-specifiers/>)
+
+  And here it says: Generally speaking, a requirement specifier is
+  composed of a project name followed by optional version specifiers.
+
+  There's a more detailed explanation here, but let's just skip right to
+  the examples:
+
+  You can specify just the project names by itself; which means you want
+    the latest release version of the package,
+
+  But you can also specify an exact version number,
+
+  Or compare versions, like this example that says I want SomeProject to
+  be a version between 1.2 and 2.0. So the comma here means "AND".
+
+  Let's try this out; we'll get back to the other examples in a moment
+
+  >> show terminal (with output of pip list)
+
+  We just installed arrow version XXX, but let's change that. Let me
+  select version 1.0.0
+
+  >> python -m pip install arrow==1.0.0 [NO ENTER]
+
+  now it's important to understand that the entire requirements
+  specifier; that is the package name with the version, should be a
+  single argument for pip install. You can make it into a single
+  argument by writing it all together without spaces, like I did here.
+  This will work. But in my opinion it is a good habit to surround this
+  with quotes
+
+  >> add quotes; and spaces around ==
+
+  >> python -m pip install "arrow == 1.0.0"
+
+  The quotes group everything between them into a single argument; when
+  I do this, I can add spaces around the equal signs; without the quotes
+  this would give an error.
+
+  Now let's run this
+
+  >> enter
+
+  This uninstalls the currently installed package, downloads arrow 1.0,
+  and installs it. You can see that pip also checks for any packages
+  that arrow 1.0 depends on; in this case those are the same we needed
+  before, so we can leave those as-is.
+
+  Now suppose we want to move back to the latest version of arrow. I
+  could try
+
+  >> python -m pip install arrow
+
+  But this doesn't work - pip says: you already have that; it doesn't
+  automatically overwrite the current install. So of course I could
+  select the latest version specifically
+
+  >> python -m pip install arrow==1.2.3
+
+  but for that you need to know what the latest version is. An nicer way
+  is to use the upgrade switch:
+
+  >> python -m pip install --upgrade arrow
+
+  Which comes down to something like: please make sure we have the
+  latest version of arrow installed; if we already have a version
+  installed please replace that. And by the way, instead of --upgrade
+  you can also use the upper case letter U, so to upgrade pip itself to
+  the latest version you would write
+
+  >> python -m pip install -U pip
+
+  Going back to the requirement specificers - You can also use more
+  complex expressions like this
+
+  >> python -m pip install "arrow > 1.0.0, 1.2.3"
+
+  So here I'm saying, I want a version of arrow later than 1.0.0, and
+  before 3.0. This syntax will not work without quotes because the
+  greater and smaller than signs have a special meaning for the shell.
+  Whenever you do comparisons you always need quotes; that's another
+  reason I think it's a good idea to simply always use quotes.
+
+  Running this, pip will select the latest version of arrow that
+  satisfies the constraints, which in this case simply gives me the
+  version 1.2.2.
+
+  Now you might ask: why would I ever want to do something like this,
+  don't you always want the latest version of a package? Well, for
+  command line use like this, you wouldn't usually call pip this way;
+  normally I would just install arrow and that's it. But for project
+  requirements, things get more complicated. We'll talk more about
+  project requirements in the next module. But for now I'll show you
+  what pip can do.
+
+
+5 clip 4: Packages with dependencies
+====================================
+
+5.1 demo slide                                                   :slide:
+~~~~~~~~~~~~~~
+
+  We've seen how to specify exactly which package we want to install,
+  but that's not the whole story. Packages can have dependencies - other
+  packages that need to be installed for them to work, and those have
+  versions as well.
+
+  We'll learn how dependencies are defined and how pip knows about them,
+
+  and we'll take a look at so-called extras: which are optional
+  dependencies that you can choose to install or not
+
+
+5.2 actual demo                                                   :demo:
+~~~~~~~~~~~~~~~
+
+  As we've seen before,
+
+  >> show screenshot of arrow installation
+
+  when we install the arrow package, it's dependency python-dateutil is
+  automatically also downloaded and installed by pip. How does pip know
+  to do this? Well, let's check out the source code for the arrow
+  package. On the pypi page for arrow we can click on the link to the
+  source code repository,
+
+  and among the source files here we find setup.py, and this file
+  contains information about how to install the arrow package. If we
+  open this file
+
+  >> do so
+
+  we see that it requires a python version 3.6 or greater, as well as
+  the packages python-dateutil, and typing-extensions, but that one is
+  only needed if you are working on a python before 3.8.
+
+  So when pip downloads the arrow package, it contains this file, which
+  tells pip the dependencies to download.
+
+  >> show this
+
+  So that's why, when you install arrow, pip will also install
+  python-dateutil. Note that pip only knows that this is a requirement
+  AFTER it downloads arrow, because it needs to reed the setup.py file
+  for that.
+
+  Let's look at a slightly more complicated example: fastapi, a python
+  package for developing rest services.
+
+  >> show github for fastapi
+
+  Fastapi uses a different file, called pyproject.toml, for the package
+  specification. This is a newer way to do this and I expect that it
+  will completely replace setup.py in due time. Looking inside the file
+
+  >> open it
+
+  here we see the dependencies: starlette - with some version specifiers
+  - and pydantic - with version specifiers of its own.
+
+  So this is where you will usually see the more complex stuff: in the
+  requirements for a project. You wouldn't usually type this into a pip
+  install command yourself.
+
+  Lets try out that this works by installing fastapi
+
+  >> python -m pip install fastapi
+
+  and this installs starlette and pydantic, but several other packages
+  as well, like idna and anyio. Why were those installed? Let's ask pip
+
+  >> python -m pip show anyio
+
+  and this tells us that anyio was required by starlette, which in turn
+  was required by fastapi. So dependencies can have other dependencies,
+  etc. It says here that anyio itself requires idna and sniffio, both of
+  which were installed by pip.
+
+  All of this means that installing a single package can cause an entire
+  tree of packages to be downloaded and installed on your system. We'll
+  talk more about that in the next module, where we focus more on
+  managing project dependencies.
+
+
+5.3 Short clip: Extras
+~~~~~~~~~~~~~~~~~~~~~~
+
+  Here we are, back in the pyproject.toml file for fastapi. A little bit
+  further down from the dependencies, we see some extra, optional
+  dependencies. These don't get installed by default; you have to
+  specify them explicitly. Notice that there are different groups of
+  these extra dependencies - one called test - for when you want to run
+  the unit tests,
+
+  one for documentation; for when you want to generate the html
+  documentation for example;
+
+  here are the development-time dependencies;
+
+  and here's the "all" group, for people who want to install a complete
+  fastapi server including things like the http server, jinja templates,
+  and more.
+
+  Now to install these extras,
+
+  >> python -m pip install "fastapi[doc,dev]"
+
+  you use square brackets after the package name, and in there you
+  specify the names of any extra's you want installed. So in this case I
+  would install everything from the doc and dev groups.
+
+  By the way, this command would also install fastapi itself if it was
+  not there yet. So this syntax installs the package AND any optional
+  extra's.
+
+  And, by the way, the quotes here are not strictly necessary, but again
+  I think it's a good idea to use them anyway. If we would use a space
+  anywhere in the argument, that would break, but with quotes it's not a
+  problem.
+
+
+6 Clip5 requirements specs in depth
+===================================
+
+  And for those of you who like formal specifications - there's an
+  official PEP document - PEP 508
+
+  >> <https://peps.python.org/pep-0508/>
+
+  that describes in great detail what these requirement specifiers look
+  like.
+
+  Scrolling down a bit, here's a complete example showing all the
+  features this supports.
+
+  So you can have the name of a package, followed by optional extras,
+  one or more version specifiers, and then after a colon you can say
+  something about the /environment/ that this should be installed for.
+  We've seen this when we were looking at the dependencies for fastapi
+  as well.
+
+  >> show fastapi toml page
+
+  In this case it says that this dependency should only be installed for
+  python before version 2.7.
+
+  Scrolling down, first there's some formal grammar etc,
+
+  >> scroll to "environment markers"
+
+  but here we see the section about that last part after the semicolon -
+  the environment marker. After some descriptions it shows us a table
+
+  >> show table
+
+  with examples of the things you can use. So you can say that a
+  dependency should only be installed on a specific platform like linux,
+  on a specific python versions, and more.
+
+  Now scrolling back up a bit
+
+  >> go to "versions"
+
+  The version part of the requirement is specified in another pep: pep
+  440. Let's check that out, too
+
+  >> go there scroll down
+
+  This pep contains even more formal specs and descriptions, but i want
+  to
+
+  >> click menu "version specifiers"
+
+  take a look at the formal description of version specifiers. Here we
+  see the various operators:
+
+  - matching a specific version,
+  - excluding a sverions,
+
+    and
+
+  - comparing versions,
+
+    and those are all quite straightforward, but there's also the
+    compatible release, with the tilde, and the "arbitrary equality".
+    Let's learn about those.
+
+    First of all - a compatible release: "A compatible release clause
+    consists of the compatible release operator ~= and a version
+    identifier. It matches any candidate version that is expected to be
+    compatible with the specified version."
+
+    The example here shows what this means. Saying we want a version of
+    a package that is compatible with 2.2, is equivalent saying that it
+    should be at least 2.2, or another version starting with a 2. But
+    not another major release like 3.1, because that might have breaking
+    changes.
+
+    Scrolling down, there's a lot of specifics about the exact behaviour
+    of version matching - I won't bore you with that, but
+
+    >> go to arbitrary equality
+
+    Here it says: "Arbitrary equality comparisons are simple string
+    equality operations". In other words, for software that does not
+    follow normal versioning standards, you can specify the version as a
+    string, and when you compare using three equal signs, like in the
+    example here with foobar, that will do a string comparison instead
+    of trying to match versions.
+
+  - 
+
+
+7 clip 6: Installing from github/URL
+====================================
+
+7.1 demo slide                                                   :slide:
+~~~~~~~~~~~~~~
+
+  Sometimes you need to install something that is not hosted on pypi,
+  the official python package repository;
+
+  In the next demo I'll show how we can install a package straight from
+  github,
+
+  and after that we'll talk about installing local files.
+
+
+7.2 Actual demo                                                   :demo:
+~~~~~~~~~~~~~~~
+
+  >> show <https://github.com/codesensei-courses/demo_pkg>
+
+  Here I am on github, I created a tiny project called demo package, for
+  the simple purpose of installing it straight from github. The reason
+  you might want to do this is
+
+  either because you need to install a package that is not on the pypi
+  repository;
+
+  or sometimes because it is on pypi, but not the exact version you
+  need. For example, in a project I've worked on we had a dependency on
+  a package with a bug. This bug was a big problem for us, but the
+  maintainer of the package did not want to fix it. So I forked the
+  project; which means I created a copy of the project under my own
+  github account, then fixed the bug. At that point I had a fixed copy
+  of the package on my own github.
+
+  Of course I also sent a pull request to the maintainer so they could
+  include the bugfix in the official package. But that could take
+  months.
+
+  In the meantime, I had my own, fixed package on github, just like the
+  package I am showing here. And we can install a package straight from
+  github. Let me show you.
+
+  First I will copy the url for this project, by clicking on code here
+  and copying the url.
+
+
+  Then, in the terminal, I can install this as follows:
+
+  >> python -m pip install "demo_pkg git+PASTE"
+
+  pip install, then a quote followed by the name of the package; which
+  in this case is demo-package. Then an at sign, followed by git, plus,
+  and then I paste the URL I just copied. Finally I need a closing
+  quote.
+
+  Pressing enter, this downloads and installs the package straight from
+  github.
+
+  How do I know that this is the correct syntax? Well,
+
+  >> <https://pip.pypa.io/>
+
+  The pip documentation says so, under topic guides, VCS support
+
+  >> show this.
+
+  It starts immediately with some examples of git urls using ssh, https,
+  and even git repos on a local file system. In each case you need to
+  use "git+" as a prefix before the url.
+
+  You should be aware that each of these are specifying a package to
+  install; so each of these lines could be a single argument for the pip
+  install command. And that means you should put quotes around them
+  because there are spaces in here as well!
+
+  Then we also see that you can specify a git branch, or a commit, among
+  others.
+
+  Scrolling down, we see that this also works for other version control
+  systems like mercurial, subversion and bazaar.
+
+  So,
+
+  >> back to cmd line, show the install command we just ran
+
+  I just ran this command, pip install, and the argument has the name of
+  the package, followed by git +, and the url to my repo. If I wanted, I
+  could add a specific commit at the end like this
+
+  >> add @ce44833
+
+
+8 Clip 7: Installing local files
+================================
+
+  >> NB setup local project on the server - in a folder "projects"
+
+  Now, what if the package you want to install is not on github but
+  somewhere on your filesystem? It could be a local file or on a shared
+  drive. Well, of course pip supports that too.
+
+  >> cd projects cd demo_pkg ls
+
+  Here I have the same example project on my local filesystem, in the
+  under the demo_pkg folder. By the way, if you wonder what makes this
+  project installable, it's this file here: pyproject.toml. You also
+  need to make sure that your project conforms to a specific directory
+  structure. In the review I'll show you some pointers if you want to
+  know more.
+
+  For now, let's go back to my other demo project >> cd ~/demo_project
+
+  And I can install my package by saying pip install and pointing to its
+  location
+
+  >> python -m pip install ~/projects/demo_pkg
+
+  You might also have the package as a single wheel file - that is the
+  file format that pip usually downloads from pypi when you install
+  something.
+
+  We can actually ask pip just to download something without installing
+  it:
+
+  >>  pip download arrow ls
+
+  This just downloads the three wheels you see here, but it has not
+  installed them yet. If I want to install one of them, I can point pip
+  straight there:
+
+  >> python -m pip install arrow....whl
+
+  and pip will take the wheel file, unpack it and install it.
+
+  >> go to <https://pip.pypa.io/en/stable/cli/pip_install/>#
+
+  Now you might remember this page - the documentation page for the pip
+  install commands - it shows several examples, and we've gone over
+  almost every one:
+
+  - installing with a requirements specifier
+  - using a version control url
+  - using a path to a local project
+  - and using an archive -which is usually a wheel file.
+
+    The one thing I haven't talked about yet is requirements files;
+    we'll get to that in the next module when we talk about managing
+    project dependencies.
+
+
+9 Clip 8: editable installs
+===========================
+
+9.1 demo slide                                                   :slide:
+~~~~~~~~~~~~~~
+
+  We've covered all the different things you can install with pip. So
+  far, all of those have been packages that you /depend/ on from the
+  project you're working on.
+
+  But now I want to discuss something different: editable installs,
+  where we install the project we're working on while we work on it..
+
+
+9.2 Actual demo                                                   :demo:
+~~~~~~~~~~~~~~~
+
+  >> show my project Make sure environment is active!
+
+  Let's take another look at my little demo package. In here
+
+  >> go into src, demo_pkg ls
+
+  There's a file called demo.py, and
+
+  >> cat demo.py
+
+  It contains a function main, which prints hello, world. This is the
+  main thing this package defines: a script called demo which will print
+  this message.
+
+  In the toml file
+
+  >> show pyproject.toml
+
+  we see that under the project scripts section, there's an entry for
+  this. It says demo is, and then this string refers to demo_pkg dot
+  demo, in other words the demo module in the demo_pkg pkg; which is the
+  demo.py file we just saw; and then a colon, and then the name of the
+  main function.
+
+  What this line means is: when pip installs my demo package, please
+  create a script called demo; and when that script is run, please call
+  the main function in demo_pkg dot demo.
+
+  Ok, so when I installed my package the demo script should have been
+  installed as well, right? let's check this
+
+  >> demo
+
+  And this works! The demo script was installed by pip in my virtual
+  environment, so when the environment is active, I will have this
+  command as well.
+
+  Now suppose I change my script
+
+  >> open demo.py, add a couple of exclamation points
+
+  To now test the script, I will have to re-install the package, and pip
+  will copy the files over to the virtual environment, including the new
+  version of the script.
+
+  When you are developing a package, that is rather annoying. You want
+  to be able to run the script you just changed, immediately.
+
+  To facilitate this, pip can install a package in editable mode:
+
+  >> pip install -e path/to/demo_pkg
+
+  This allows you to install your project without copying any files.
+  Instead, the files in the development directory are added to Python’s
+  import path.
+
+  So now, the demo script should be updated
+
+  >> demo
+
+  And let's make another change
+
+  >> in demo.py: remove excl. points, add simple dot
+
+  and now,
+
+  >> demo
+
+  when I run the demo script, we see the changes immediately. So
+  usually, when your project is a package that will be installed through
+  pip by yourself or others,
+
+  during development you will install the package with -e, so that any
+  changes in your code are immediately present in your virtual
+  environment and you can test them out.
+
+  With an editable install, you only need to perform a re-installation
+  if you change the project metadata in the pyproject.toml file.
+
+
+10 Clip 9: Review: Installing packages with pip                  :slide:
+===============================================
+
+10.1 Requirements specifiers                                     :slide:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Let's review what we've learned so far. We started with the most
+  common way of installing packages, which is
+
+  >> pip install arrow
+
+  pip install, followed by a requirements specifier. This can be just
+  the name of a package, in which case this will download and install
+  the latest release version of the package.
+
+  Or you can say that you want a specific versoin
+
+  >> ==1.2.3, # use quotes
+
+  and although the quotes in this case are not really necessary, I still
+  think it's a good idea to use them,
+
+  Or you can compare versions, saying something like, I want a version
+  before 1.2
+
+  >> < 2.0
+
+  >> >= 1.2
+
+  This one selects version 1.2 or above.
+
+  The not equal operator, !=, is used to avoid installing a specific
+  version of a package. This can be helpful if a certain version has
+  known issues or conflicts with other dependencies.
+
+  >> pip install arrow!=1.2.2
+
+  Here I install arrow but specifically disallow version 1.2.1
+
+  You can also combine multiple version comparison operators to specify
+  a more precise version range for a package.
+
+  >> pip install Flask>=1.0.0,!=1.1.0,<=2.0.0
+
+  This command installs the latest version of the Flask package that is
+  greater than or equal to 1.0.0, not equal to 1.1.0, and less than or
+  equal to 2.0.0.
+
+  So these version comparison operators can be used with any Python
+  package available on PyPI, and they provide a powerful way to manage
+  dependencies and ensure compatibility in your projects.
+
+
+10.2 Requirement Specifiers 2                                    :slide:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Another thing you can do is select a compatible release, with the
+  operator you see here: a tilde and an equals sign.
+
+  A compatible version is one that has the same major version number as
+  the specified version and a minor version number equal to or greater
+  than the specified version.
+
+  >> pip install requests~=2.24.0
+
+  This command installs the latest compatible version of the requests
+  package, with a major version of 2 and a minor version equal to or
+  greater than 24.
+
+
+10.2.1 Environment marker
+-------------------------
+
+  After the version specifier, you can add a semicolon followed by a
+  so-called environment marker. This allows you to say that a specific
+  dependency should only be installed in a specific environment.
+  Examples would be
+
+  To install the "asyncio" package only for Python 3.4.x:
+
+  >> pip install asyncio; python_version=='3.4'
+
+  Note that the single quotes around the version number are mandatory
+  here. To install the "typing" package only for Python versions less
+  than 3.5 we would say this:
+
+  >> pip install typing; python_version<'3.'5
+
+  There are also two markers, os_name and sys_platform are two different
+  environment markers in Python that help identify the operating system
+  in use.
+
+  As a rule of thumb, os_name is more general than sys_platform.
+
+  For example os_name='posix' will install for linux, mac os, or any
+  other unix system,
+
+  and os_name='nt' will install for any windows system.
+
+  To select mac os specifically, you would use sys_platform='darwin'
+
+  If you want to know more, look up the documentation for the
+  sys.platform and os.name from the official python documentation. I'll
+  add links at the end of the module.
+
+
+10.3 Requirement Specifiers 3                                    :slide:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  When you just use the name of a package
+
+  >> pip install arrow # will NOT override currently installed packages
+
+  I just mentioned that pip would install the latest version. This is
+  only true if you don't have a version installed yet. In that case, if
+  you want to upgrade to the latest version, use the --upgrade flag
+
+  >> -- upgrade
+
+
+10.3.1 Extras
+-------------
+
+  Some packages have optional extras that you can install, and you can
+  specify those with square brackets
+
+  >> pip install "fastapi[all]"
+
+  In the example here we don't just install fastapi, but also a complete
+  set of optional extras to host a fastapi webservice using an http
+  server.
+
+  Or you can even have multiple extras
+
+  >> [docs, test]
+
+
+10.4 Installing from Other sources                               :slide:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  We've seen that you can install packages straight from github
+
+  >> show example
+
+  And note that you start with the name of the package to install,
+  followed by an at sign, then git-plus, and only after that the actual
+  url to install from. Both SSH and https urls are supported.
+
+  And you can even refer to specific commits, tags, or a branch
+
+  >> 2 more examples
+
+
+10.4.1 local files
+------------------
+
+  Or you can install from a local drive. In this case the location you
+  point pip to, can be either a project - in which case it has to be an
+  installable project, which means it should have a pyproject.toml file
+  or similar,
+
+  or it can be some kind of archived project, like a wheel that you
+  downloaded from pypi.
+
+  You can also install a project in editable mode
+
+  pip install -e .
+
+  In the last example here you install "dot", which means the project in
+  the current working directory. This installs the project without
+  copying over files; any changes to your code will be immediately
+  reflected in the installed package. This is very common when
+  developing an installable python package.
+
+
+11 Clip 10: Installation outside of projects // executables/utilities
+=====================================================================
+
+11.1 Demo Slide                                                  :slide:
+~~~~~~~~~~~~~~~
+
+  Now let'ss talk about the situations when you want to install
+  something /outside/ of a project,
+
+  like a command or utility you need to be available everywhere.
+
+  We'll check out two ways to do this:
+
+  - pip with the --user switch
+
+  and pipx
+
+
+11.2 Actual Demo                                                  :demo:
+~~~~~~~~~~~~~~~~
+
+  >> back on ssh NOTE python3-pip has been uninstalled so demo should go
+  >> well
+
+  All the demos in this module Ive been running on a Ubuntu linux
+  system, the one we're looking at right now. It has a python3 version
+  installed by default. Note that I'm not in an active environment right
+  now, so what we see here is the default version
+
+  >> python3 -V
+
+  which is located in /usr/bin/python3. This is our /system/ python
+  version. What I mean with that, is that it's mainly there for parts of
+  your system that have been written in python. It's been tested with
+  all the parts of this linux system, it will get security updates with
+  the rest of the system, etc. Generally speaking you usually don't want
+  to mess with it; you don't really want to change the packages that are
+  installed for this global system python.
+
+  On mac OS there also used to be a system python install, but on newer
+  macs this is not the case anymore. On windows this also does not apply
+  because there is no pre-installed python there.
+
+  >> python3 -m pip
+
+  many linux distributions don't install pip by default, to discourage
+  you from messing with the system python installation.
+
+  We could add pip using the system package manager; for ubuntu this is
+  called apt
+
+  >> sudo apt install python3-pip [DO run this]
+
+  so here I'm installing the pip package for this linux system with apt.
+
+  But of course you can only run this when you have system administrator
+  rights, which you might not have. But suppose you have those rights,
+  or you get your administrator to install pip for you, now you can call
+  pip to install stuff for you. Let's install black, the static code
+  formatter:
+
+  >> python3 -m pip install black [NO enter]
+
+  Note that I'm saying 'python3 -m pip' because the default python
+  interpreter here is called python3.
+
+  And what does this command mean? It says to install black - and we are
+  not inside a virtual environment. So that would mean a global
+  installation.. for which I don't have the rights. When I run this
+
+  >> run
+
+  we see that pip tells us so as well:
+
+        Defaulting to user installation because normal
+        site-packages is not writeable
+
+  On other systems or with older python versions you would get an error
+  here because you don't have the rights to install black. Instead,
+
+  >> python3 -m pip show black
+
+  You can see that it has been installed in the .local folder for my
+  user. In other words, this has now been installed specifically for my
+  user.
+
+  You can do this explicitly as well with the --user switch:
+
+  >> python3 -m pip install --user black
+
+  This doesn't try to install globally first, but just tells pip to
+  install it for your user.
+
+  - show we cannot run black - .local/bin/ not on PATH
+  - also it's stil globally installed - no env isolation. Bad practtice;
+    pollution of main python environment
+
+  there's a Better solution called pipx; let's install that - I'll use
+  the system package manager, but I'll add a link to the slides at the
+  end of the module, so you can check how to install pipx on your system
+
+  >> sudo apt install pipx
+
+  Pipx is tool to help you install and run end-user applications written
+  in Python; so it's somewhere in between apt, the system installer, and
+  pip, the python installer.
+
+  pipx is made specifically for application installation, as it adds
+  isolation but still makes the apps available in your shell: pipx
+  creates an isolated environment for each application and its
+  associated packages.
+
+  Before we use pipx, theres one command I want to run: ensurepath. This
+  checks whether our path is setup correctly, and makes sure everything
+  works as intended
+
+  >> pipx ensurepath
+
+  This effectively adds a line to one of the shell configuration files,
+  dot-profile:
+
+  tail -1 .profile
+
+  So this line makes sure that the location where python scripts are
+  installed for my user - which is .local/bin, is on my path. To make
+  sure this line takes effect you can log out and log in again..
+
+  >> do so
+
+  And the black script now works:
+
+  >> black
+
+  This was not installed by pipx, but with pip --user; both of those
+  install in .local/bin, so all scripts in there should now be found by
+  the shell.
+
+  Let's install something with pipx now, let's do flake8
+
+  >> pipx install flake8
+
+  So this will install flake8 in .local/bin
+
+  >> ls .local/bin
+
+  There it is. So pip --user and pipx both install in this folder, and
+  we can see black here as well. The main difference is that pipx
+
+  >> ls .local/pipx/venv
+
+  Creates a dedicated virtual environment for every package it installs;
+  as you can see here in the pipx venv folder. Pip does not do this for
+  you.
+
+  Pipx also helps you setup your environment with the ensurepath
+  command.
+
+  For a short overview of the other things pipx can do, let's check out
+  the help
+
+  >> pipx --help
+
+  So we can do all things you would expect: install, uninstall, upgrade,
+  and list installed packages. But there's also a little hidden gem
+  here: the "run" command willl download and install a tool in a
+  *temporary* environment. This is very nice when you want to try out
+  something without having it installed on your system.
+
+
+12 Clip 11: Configuring pip to fit your needs
+=============================================
+
+12.1 Demo slide                                                  :slide:
+~~~~~~~~~~~~~~~
+
+  There are certain options for pip that you might want to add to every
+  command, specifically if you are
+
+  - hosting your own package repository
+  - using a proxy server to access the internet
+
+  or need to
+
+  - use custom SSL certificates
+
+  You /can/ add these options on the commandline for pip, but it's nicer
+  to set up a pip configuration file. Let's see how to do this.
+
+
+12.2 Actual demo                                                  :demo:
+~~~~~~~~~~~~~~~~
+
+  If you work for a company that creates lots of packages for internal
+  use, you probably don't want to upload those to pypi. Instead you
+  might choose to host them on your own repository using something like
+  devpi or nexus.
+
+  >> show devpi homepage:
+     <https://devpi.net/docs/devpi/devpi/stable/%2Bd/index.html>
+
+  For third-party packages you might also choose to do a security review
+  for the things you need, and only put trusted packages in your own
+  repo.
+
+  You can tell pip to use a different repository url with the index url
+  switch:
+
+  >> pip install requests --index-url <http://my-repo.example.com> [NO
+     ENTER]
+
+  so this will make pip contact that URL instead of pypi for downloading
+  the packages.
+
+  Of course, having to add this switch to your every pip command quickly
+  becomes annoying. So instead you can create a pip config file:
+
+  >> <https://pip.pypa.io/en/stable/topics/configuration/>
+
+  Here's the documentation page for that. You can create a pip config
+  file in three places: a global, system wide file, a file for your
+  user, or a file for a virtual environment.
+
+  For now I want to focus on creating a configuration file in a virtual
+  environment. If you want to create a file for your user or system, the
+  locations are listed here, for different operating systems.
+
+  I'll add a link to this documentation page in the review at the end of
+  the module.
+
+  > click windows, mac, unix
+
+  Note, by the way, that on windows the file is called pip.ini, where it
+  is called pip.conf on mac os.
+
+  Now let's look at the contents of the file
+
+  >> scroll to "naming"
+
+  The file has sections; and the global section, shown here, is for
+  settings that apply to all commands. You can also have sections for a
+  specific command as you can see below here, where we set a different
+  timeout specifically for the pip freeze comand.
+
+  The settings themselves have the same names as the command line
+  switches you can pass to pip commands. So to set the index url, as you
+  can see here, we say index-url is, followed by the url.
+
+  >> create pip.conf in env - set index url to example.com show terminal
+  >> cat pip.conf
+
+  So here I have a pip.conf in my virtual environment, setting the index
+  url to example.com. So pip will now try to look for packages at that
+  url.
+
+  Running pip install now will fail because the repo doesn't exist, but
+  it DOES show you that the configuration works
+
+  >> pip install requests
+
+  So pip picks up the configuration from the file and we don't have to
+  put the index url in the install command anymore.
+
+  By the way, looking at the documentation of the general pip command
+
+  >> docs -> commands -> pip
+
+  There are some other settings here that can be useful on corporate
+  networks. For example the --proxy setting in case you are behind a
+  proxy, and settings like trusted-host, cert and client-cert in case
+  you have to deal with ssl certificates. Those are settings that you
+  might want to add to your pip.conf as well.
+
+
+13 12 Review  (?)
+=================
+
+13.1 installing utilities
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  So, if you need to install things outside of a project, - which
+  usually means it's some kind of utility like black or pylint or
+  ansible,
+
+  You probably want to install it using pipx
+
+  >> pipx bla
+
+  which will install it for your user and make sure it lives in its own
+  separate virtual environment.
+
+  Pipx can also help you configure your path so that commands are found
+  automatically by your shell. Just run
+
+  pipx ensurepath
+
+  If you don't want to install pipx, you can get close to this using pip
+  install with the --user switch
+
+  >> pip install XXX --uuser
+
+  but in that case the package does not get its own virtual environment
+  and you're basically polluting your python installation. So in general
+  using pipx is a better idea. Also, in this case you need to set your
+  path yourself.
+
+  On linux, you /can/ also install things for the entire system with a
+  command like
+
+  >> sudo pip install bla
+
+  but this is generally a bad idea because this might affect your
+  /system/ python installation, which is needed for your system to work
+  properly
+
+
+13.2 Resources 1
+~~~~~~~~~~~~~~~~
+
+  Here are some links to help you find more information. The ones shown
+  here point to the official pip documentation,
+
+  a helpful list of examples for pip commands,
+
+  and the documentation for the pip config file format.
+
+  If you need to specify a package that only needs to be installed on a
+  specific platform or OS, you can use the sys_platform environment
+  marker. The link here will show you the values that it takes. It also
+  has a link to os.name, which is the other marker you can use.
+
+
+13.3 Resources 2
+~~~~~~~~~~~~~~~~
+
+  And here are links to some other resources. The first one explains how
+  to get started writing a pyproject.toml file to make your python
+  project into an installable package.
+
+  Then there's pipx, for installing standalone executables outside of
+  projects,
+
+  annd there's pyenv, a utility that helps you install and manage
+  multiple python versions on a single system.
+
+  - os.name, sys_platform
+
+
+13.4 Summary                                                     :slide:
+~~~~~~~~~~~~
+
+  And that wraps up this module. We've learned a lot about the things
+  pip can do. We talked about installing package with
+
+  a specific version,
+
+  using various different operators,
+
+  and how packages with dependencies are handled.
+
+  We saw that we can install packages from other sources than just pypi,
+  like github or local projects. And we talked about editable projects.
+
+  Pip can also be used to install general utitilities that are not bound
+  to any project at all.
+
+  And we learned how to write a pip config file, which is mostly useful
+  for things like network settings.
+
+
+13.5 up next                                                     :slide:
+~~~~~~~~~~~~
+
+  Great. I hope you'll join me for the next module, where we will focus
+  on working with projects and virtual environments.
