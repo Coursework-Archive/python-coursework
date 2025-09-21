@@ -1,0 +1,11 @@
+# --- Python bytecode / caches ---
+__pycache__/
+.pytest_cache/
+
+# --- Virtual environments ---
+.venv/
+
+# --- IDE / editor ---
+.idea/
+
+

@@ -1,0 +1,22 @@
+# sample1.txt — lines to practice regex searching
+This is a sample line with the word sample in it.
+No special words here.
+Another line that mentions Sample in different Case.
+The price is $19.99 and the code is ABC-123.
+My phone number is 123-456-7890, call me.
+Log entry: 2023-03-11 14:22:01 — status=200 path=/home
+Broken phone format 1234567890 should not match the dashed pattern.
+A multi-word example: hello
+world
+Edge-case: samples shouldn't match whole-word \b boundaries for 'sample'.
+The last line has nothing interesting.
+Contact: Jane Doe
+Phone: 123-456-7890
+Email: jane.doe+news@example.co.uk
+Address: 101 Main St, San Francisco, CA 94105-1234
+Order: AB-1234-5678
+Primary color: #1F77B4
+phone: 1234567890
+zip: 9410
+hex: #ZZZZZZ
+email: user@@example..com
